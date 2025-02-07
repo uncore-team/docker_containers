@@ -1,0 +1,13 @@
+services:
+  tyrell-portainer:
+    labels:
+      maintainer: "Vicente Arévalo"
+      description: "tyrell-portainer / Container for container management / TYRELL project"
+    image: portainer/portainer
+    container_name: tyrell-portainer
+    ports:
+      - "9000:9000"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - $HOME/docker/portainer:/data
+    restart: always

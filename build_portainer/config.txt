@@ -1,0 +1,3 @@
+IMAGE_NAME=portainer/portainer
+CONTAINER_NAME=tyrell-portainer
+PORTS_PREFIX=

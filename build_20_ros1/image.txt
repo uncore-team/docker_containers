@@ -1,0 +1,2 @@
+# Imagen base
+IMAGE_NAME=tyrell-ubuntu20-nvidia-ssh-xrdp-ros1
