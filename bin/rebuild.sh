@@ -1,5 +1,27 @@
 #!/bin/bash
 
+# Function to display help
+show_help() {
+  echo "Usage: $0 [OPTION]"
+  echo "This script automates the process of building a Docker image."
+  echo
+  echo "Description:"
+  echo "  1. Checks for the existence of the 'image.txt' file."
+  echo "  2. Reads the image name from 'image.txt'."
+  echo "  3. Checks if the image already exists and handles dependent containers."
+  echo "  4. Builds the new Docker image."
+  echo "  5. Lists available Docker images."
+  echo
+  echo "Options:"
+  echo "  -h, --help    Show this help message and exit."
+  exit 0
+}
+
+# Check for help option
+if [[ "$1" == "-h" || "$1" == "--help" ]]; then
+  show_help
+fi
+
 # Check if the image.txt file exists
 if [ ! -f "image.txt" ]; then
   echo "image.txt file not found."

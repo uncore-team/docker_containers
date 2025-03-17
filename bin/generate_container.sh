@@ -1,5 +1,30 @@
 #!/bin/bash
 
+# Function to display help
+show_help() {
+  echo "Usage: $0 <project name> <container name> <port prefix -1,2,..,5->"
+  echo "This script automates the setup and configuration of a Docker container for a specific project."
+  echo
+  echo "Description:"
+  echo "  1. Validates input arguments."
+  echo "  2. Checks for required files (e.g., image.txt)."
+  echo "  3. Reads the Docker image name from image.txt."
+  echo "  4. Ensures the Docker image exists."
+  echo "  5. Creates project and container directories."
+  echo "  6. Generates configuration files (e.g., config.txt)."
+  echo "  7. Generates a Docker Compose file using generate_compose.sh."
+  echo "  8. Copies necessary files to the container's home directory."
+  echo
+  echo "Options:"
+  echo "  -h, --help    Show this help message and exit."
+  exit 0
+}
+
+# Check for help option
+if [[ "$1" == "-h" || "$1" == "--help" ]]; then
+  show_help
+fi
+
 # Check if arguments were provided
 if [ "$#" -ne 3 ]; then
     echo "Usage: $0 <project name> <container name> <port prefix -1,2,..,5->"
@@ -84,4 +109,5 @@ for file in "${FILES_TO_COPY[@]}"; do
 
 done
 
-echo "Container generation completed."
+echo "Container generation completed!!."
+echo "Please, change to the folder: $BASE_DIR, and run play.sh to start the container."
