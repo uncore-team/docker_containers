@@ -16,13 +16,13 @@ if [ -z "$CONTAINER_NAME" ]; then
 fi
 
 # Check if the container is already stopped
-if ! docker ps --format "{{.Names}}" | grep -q "^$CONTAINER_NAME$"; then
+if ! docker ps --format "{{.Names}}" | grep "$CONTAINER_NAME" &>/dev/null; then
     echo "The container '$CONTAINER_NAME' is already stopped."
     exit 1
 fi
 
 # Verify the container's status
-STATUS=$(docker inspect --format='{{.State.Status}}' "$CONTAINER_NAME")
+STATUS=$(docker inspect --format='{{.State.Status}}' $CONTAINER_NAME)
 
 if [ "$STATUS" == "paused" ]; then
     echo "The container '$CONTAINER_NAME' is paused. Resuming..."

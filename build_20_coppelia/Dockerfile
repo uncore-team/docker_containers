@@ -1,10 +1,10 @@
 # Base image
-FROM nvidia/cuda:12.2.0-base-ubuntu22.04
+FROM nvidia/cuda:12.2.0-base-ubuntu20.04
 
-# Avoid interactive questions during installation
+# Evitar preguntas interactivas durante la instalación
 ARG DEBIAN_FRONTEND=noninteractive
 
-# Configure locales and time zone
+# Configurar locales y zona horaria
 ARG LANGUAGE=es_ES:es \
     LANG=es_ES.UTF-8 \
     LC_ALL=es_ES.UTF-8
@@ -17,93 +17,84 @@ RUN apt-get update && apt-get install -y \
     update-locale LANG=${LANG} LC_ALL=${LC_ALL} && \
     ln -fs /usr/share/zoneinfo/Europe/Madrid /etc/localtime && \
     dpkg-reconfigure --frontend=noninteractive tzdata && \
-    # Clean up
+    # Limpieza
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-# Persist the values in the runtime environment
+# Persistir los valores en el entorno de ejecución
 ENV LANGUAGE=${LANGUAGE} \
     LANG=${LANG} \
     LC_ALL=${LC_ALL}
 
-# Install essential packages
+# Instalar paquetes esenciales
 RUN apt-get update && apt-get install -y \
-    # Basic tools
-    wget curl git software-properties-common bash-completion apt-utils dialog \
+    # Herramientas básicas
+    wget curl git software-properties-common \
     # Entorno gráfico
     xfce4 xfce4-goodies \
-    # Remote desktop server
+    # Servidor de escritorio remoto
     xrdp \
-    # Audio support
+    # Soporte de audio
 #    pulseaudio \
-    # Video drivers
+    # Controladores de video
     xserver-xorg-video-all \
     mesa-utils \
     libgl1-mesa-glx \
     libgl1-mesa-dri \
-    # Browser and graphical utilidades gráficas 
-#    firefox \
-    # Network and SSH tools
+    # Navegador y utilidades gráficas 
+    firefox \
+    # Herramientas de red y SSH
     openssh-server \
-    # System tools
+    # Herramientas de sistema
     sudo dbus dbus-x11 \
-    # Additional utilities
+    # Utilidades adicionales
     nano net-tools util-linux \
-    # Debugging utilities
+    # Utilidades de depuración
     x11-apps && \
     # Limpieza
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-RUN apt-get update && \
-    apt-get install -y wget gnupg && \
-    wget -qO- https://dl.google.com/linux/linux_signing_key.pub | apt-key add - && \
-    echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google-chrome.list && \
-    apt-get update && \
-    apt-get install -y google-chrome-stable && \
-    # Limpieza
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
-
-# Install development packages
+# Instalar paquetes desarrollo
 RUN apt-get update && apt-get install -y \
     build-essential \
+    python-is-python3 \
     python3-dev \
     python3-opengl \
     python3-pip \
     python3-venv \
     swig \
     xvfb && \
-    # Clean up
+    # Limpieza
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-# Copy scripts and configuration files: X11, SSH, and XRDP
+# Copiar scripts y ficheros de configuración: X11, SSH y XRDP
 COPY ./scripts/ /
 
-# Assign execution permissions to the scripts
+# Asignar permisos de ejecución a los scripts
 RUN chmod +x /*.sh
 
-# Run the installer for specific packages (if any)
+# Ejecutar el instalador de paquetes específicos (si lo hay)
 RUN if [ -f /packages.sh ]; then /packages.sh; fi
 
-# Prepare dbus configuration and permissions
+# Preparar configuración de dbus y permisos
 RUN mkdir -p /var/run/dbus \
     && chmod 755 /var/run/dbus \
     && dbus-uuidgen > /var/lib/dbus/machine-id
 
-# Create runtime directory
+# Crear directorio de runtime
 RUN mkdir -p /run/user/0 \
     && chmod 700 /run/user/0
 
-# Create root user with password
+# Crear usuario root con contraseña
 RUN echo "root:test" | chpasswd
 
-# To facilitate copying between host and guest
+# Para facilitar la copia entre host y guest
 RUN chmod 777 /root
 
-# Expose ports
+# Exponer puertos
 EXPOSE 22 80 3389
 
-# Configure entry point (not needed if using play.sh)
+# Configurar punto de entrada (no necesario si se usa play.sh)
 # ENTRYPOINT ["/init.sh"]
