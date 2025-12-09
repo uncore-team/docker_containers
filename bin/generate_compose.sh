@@ -34,8 +34,6 @@ services:
       - NVIDIA_VISIBLE_DEVICES=all # Expose all GPUs
       - NVIDIA_DRIVER_CAPABILITIES=compute,utility,graphics # Required capabilities
 
-#      - PULSE_SERVER="unix:/run/pulse/native" # PulseAudio server address
-
     privileged: true
 
     cap_add:
@@ -56,9 +54,6 @@ services:
 
       - /tmp/.X11-unix:/tmp/.X11-unix      # Share graphical environment
       - /usr/lib/nvidia:/usr/lib/nvidia    # Mount NVIDIA libraries
-
-#      - ${XDG_RUNTIME_DIR}/pulse/native:/run/pulse/native   # Map PulseAudio socket
-#      - $HOME/.config/pulse/cookie:/root/.config/pulse:ro   # PulseAudio authentication cookie
 
     runtime: nvidia  # Enable NVIDIA support
 

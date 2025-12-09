@@ -1,2 +1,1 @@
-# Imagen base
 IMAGE_NAME=tyrell-ubuntu22-nvidia-ssh-xrdp

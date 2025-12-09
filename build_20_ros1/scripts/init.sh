@@ -41,8 +41,5 @@ echo "Iniciando XRDP..."
 
 # Añadir aquí otros servicios o configuraciones adicionales si lo necesitas
 
-# Iniciar PULSEAUDIO
-#pulseaudio --start
-
 # Impedir el cierre del contenedor
 tail -f /dev/null

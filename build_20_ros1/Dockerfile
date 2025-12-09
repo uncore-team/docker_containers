@@ -29,13 +29,11 @@ ENV LANGUAGE=${LANGUAGE} \
 # Install essential packages
 RUN apt-get update && apt-get install -y \
     # Basic tools
-    wget curl git software-properties-common \
+    wget curl git software-properties-common bash-completion apt-utils dialog \
     # Graphical environment
     xfce4 xfce4-goodies \
     # Remote desktop server
     xrdp \
-    # Audio support
-#    pulseaudio \
     # Video drivers
     xserver-xorg-video-all \
     mesa-utils \
@@ -54,6 +52,16 @@ RUN apt-get update && apt-get install -y \
     # Cleanup
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
+
+# RUN apt-get update && \
+#     apt-get install -y wget gnupg && \
+#     wget -qO- https://dl.google.com/linux/linux_signing_key.pub | apt-key add - && \
+#     echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google-chrome.list && \
+#     apt-get update && \
+#     apt-get install -y google-chrome-stable && \
+#     # Limpieza
+#     apt-get clean && \
+#     rm -rf /var/lib/apt/lists/*
 
 # Install development packages
 RUN apt-get update && apt-get install -y \
@@ -95,6 +103,3 @@ RUN chmod 777 /root
 
 # Expose ports
 EXPOSE 22 80 3389
-
-# Configure entry point (not needed if using play.sh)
-# ENTRYPOINT ["/init.sh"]
